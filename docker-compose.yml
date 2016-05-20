@@ -1,0 +1,17 @@
+wordpress:
+  image: wordpress
+  ports:
+    - "80:80"
+  links:
+    - wordpressdb:db
+  environment:
+    - WORDPRESS_DB_HOST=db
+    - WORDPRESS_DB_USER=root
+    - WORDPRESS_DB_PASSWORD=helloworld
+
+wordpressdb:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=helloworld
+    - MYSQL_USER=wpuser
+    - MYSQL_USER_PASSWORD=threetwoone
