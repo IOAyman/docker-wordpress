@@ -15,3 +15,10 @@ wordpressdb:
     - MYSQL_ROOT_PASSWORD=helloworld
     - MYSQL_USER=wpuser
     - MYSQL_USER_PASSWORD=threetwoone
+
+pma:
+  image: phpmyadmin/phpmyadmin
+  links:
+    - wordpressdb:db
+  ports:
+    - "8888:80"
