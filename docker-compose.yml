@@ -1,24 +1,28 @@
-wordpress:
-  image: wordpress
-  ports:
-    - "80:80"
-  links:
-    - wordpressdb:db
-  environment:
-    - WORDPRESS_DB_HOST=db
-    - WORDPRESS_DB_USER=root
-    - WORDPRESS_DB_PASSWORD=helloworld
+version: "3"
+services:
+  wordpress:
+    container_name: wp
+    image: wordpress
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - WORDPRESS_DB_HOST=db
+      - WORDPRESS_DB_USER=root
+      - WORDPRESS_DB_PASSWORD=helloworld
 
-wordpressdb:
-  image: mysql
-  environment:
-    - MYSQL_ROOT_PASSWORD=helloworld
-    - MYSQL_USER=wpuser
-    - MYSQL_USER_PASSWORD=threetwoone
+  db:
+    container_name: wpdb
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=helloworld
+      - MYSQL_USER=wpuser
+      - MYSQL_USER_PASSWORD=threetwoone
 
-pma:
-  image: phpmyadmin/phpmyadmin
-  links:
-    - wordpressdb:db
-  ports:
-    - "8888:80"
+  pma:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    ports:
+      - "8888:80"
