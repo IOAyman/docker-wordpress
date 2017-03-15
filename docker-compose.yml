@@ -1,8 +1,9 @@
 version: "3"
 services:
-  wordpress:
+  web:
     container_name: wp
     image: wordpress
+    restart: on-failure
     ports:
       - "80:80"
     depends_on:
@@ -11,6 +12,8 @@ services:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=root
       - WORDPRESS_DB_PASSWORD=helloworld
+    networks:
+      - wpnet
 
   db:
     container_name: wpdb
@@ -19,10 +22,20 @@ services:
       - MYSQL_ROOT_PASSWORD=helloworld
       - MYSQL_USER=wpuser
       - MYSQL_USER_PASSWORD=threetwoone
+    networks:
+      - wpnet
 
   pma:
+    container_name: pma
     image: phpmyadmin/phpmyadmin
     depends_on:
       - db
     ports:
       - "8888:80"
+    networks:
+      - wpnet
+
+# volumes:
+#   wp-data:
+networks:
+  wpnet:
