@@ -12,6 +12,8 @@ services:
       - WORDPRESS_DB_HOST=db
       - WORDPRESS_DB_USER=root
       - WORDPRESS_DB_PASSWORD=helloworld
+    volumes:
+      - wp-data:/var/www/html
     networks:
       - wpnet
 
@@ -22,6 +24,8 @@ services:
       - MYSQL_ROOT_PASSWORD=helloworld
       - MYSQL_USER=wpuser
       - MYSQL_USER_PASSWORD=threetwoone
+    volumes:
+      - wp-db-data:/var/lib/mysql
     networks:
       - wpnet
 
@@ -35,7 +39,8 @@ services:
     networks:
       - wpnet
 
-# volumes:
-#   wp-data:
+volumes:
+  wp-data:
+  wp-db-data:
 networks:
   wpnet:
