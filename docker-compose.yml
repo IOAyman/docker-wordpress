@@ -3,7 +3,6 @@ services:
   web:
     container_name: wp
     image: wordpress
-    restart: on-failure
     ports:
       - "80:80"
     depends_on:
@@ -16,6 +15,17 @@ services:
       - wp-data:/var/www/html
     networks:
       - wpnet
+    deploy:
+      mode: replicated
+      replicas: 5
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 2m
 
   db:
     container_name: wpdb
@@ -28,6 +38,16 @@ services:
       - wp-db-data:/var/lib/mysql
     networks:
       - wpnet
+    deploy:
+      mode: global
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 2m
 
   pma:
     container_name: pma
@@ -38,6 +58,14 @@ services:
       - "8888:80"
     networks:
       - wpnet
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 2m
 
 volumes:
   wp-data:
